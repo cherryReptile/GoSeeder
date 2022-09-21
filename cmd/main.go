@@ -19,7 +19,6 @@ func main() {
 	for goroutineNum := 0; goroutineNum < 80; goroutineNum++ {
 		wg.Add(1)
 		go seeders.Run(app.DB, wg, goroutineNum)
-		runtime.Gosched()
 		fmt.Println("start goroutine", goroutineNum+1)
 	}
 	wg.Wait()

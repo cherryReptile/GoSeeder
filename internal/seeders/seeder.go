@@ -1,26 +1,35 @@
 package seeders
 
-//func Run(db *sqlx.DB) {
-//	wg := &sync.WaitGroup{}
-//	for counter := 0; counter < 500000; counter++ {
-//		wg.Add(1)
-//		go create(db)
-//		fmt.Sprintf("created %v post", counter)
-//		runtime.Gosched()
-//	}
-//	wg.Wait()
-//	fmt.Println("success")
-//}
-//
-//func create(db *sqlx.DB) {
-//	model := new(models.Fake)
-//	faker := faker.New()
-//	faker.Struct().Fill(model)
-//	err := model.Create(db)
-//
-//	if err != nil {
-//		os.Exit(1)
-//	}
-//
-//	fmt.Println("success")
-//}
+import (
+	"fmt"
+	"github.com/cherryReptile/GoSeeder/internal/models"
+	"github.com/jaswdr/faker"
+	"github.com/jmoiron/sqlx"
+	"log"
+	"os"
+	"sync"
+	"time"
+)
+
+func Run(db *sqlx.DB, wg *sync.WaitGroup, goroutineNum int) {
+	start := time.Now().Unix()
+	defer wg.Done()
+	for counter := 0; counter < 6250; counter++ {
+		create(db)
+	}
+	finish := time.Now().Unix() - start
+	fmt.Println(fmt.Sprintf("****finished goroutine with num %v after %v seconds****", goroutineNum+1, finish))
+}
+
+func create(db *sqlx.DB) {
+	model := new(models.Fake)
+	faker := faker.New()
+	faker.Struct().Fill(model)
+	err := model.Create(db)
+
+	if err != nil {
+		log.Fatalf("[ERROR] %v", err)
+		os.Exit(1)
+	}
+
+}

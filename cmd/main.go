@@ -1,20 +1,27 @@
 package main
 
 import (
+	"fmt"
 	"github.com/cherryReptile/GoSeeder/internal/base"
-	"github.com/cherryReptile/GoSeeder/internal/models"
-	"log"
-	"time"
+	"github.com/cherryReptile/GoSeeder/internal/seeders"
+	"runtime"
+	"sync"
 )
 
 func main() {
 	app := new(base.App)
 	app.Init()
 
-	fake := models.Fake{String: "test", Date: time.Now()}
-	err := fake.Create(app.DB)
+	fmt.Println("start")
+	runtime.GOMAXPROCS(4)
 
-	if err != nil {
-		log.Fatal("SUka")
+	wg := &sync.WaitGroup{}
+	for goroutineNum := 0; goroutineNum < 80; goroutineNum++ {
+		wg.Add(1)
+		go seeders.Run(app.DB, wg, goroutineNum)
+		runtime.Gosched()
+		fmt.Println("start goroutine", goroutineNum+1)
 	}
+	wg.Wait()
+	fmt.Println("db was filled")
 }

@@ -12,13 +12,13 @@ import (
 )
 
 func Run(db *sqlx.DB, wg *sync.WaitGroup, goroutineNum int) {
-	start := time.Now().Unix()
+	start := time.Now()
 	defer wg.Done()
 	for counter := 0; counter < 6250; counter++ {
 		create(db)
 	}
-	finish := time.Now().Unix() - start
-	fmt.Println(fmt.Sprintf("****finished goroutine with num %v after %v seconds****", goroutineNum+1, finish))
+	finish := time.Now().Sub(start)
+	fmt.Println(fmt.Sprintf("****finished goroutine with num %v after %v****", goroutineNum+1, finish))
 }
 
 func create(db *sqlx.DB) {

@@ -17,7 +17,7 @@ func Run(db *sqlx.DB, wg *sync.WaitGroup, goroutineNum int) {
 	for counter := 0; counter < 6250; counter++ {
 		create(db)
 	}
-	finish := time.Now().Sub(start)
+	finish := time.Since(start)
 	fmt.Println(fmt.Sprintf("****finished goroutine with num %v after %v****", goroutineNum+1, finish))
 }
 

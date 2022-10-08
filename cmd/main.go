@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/cherryReptile/GoSeeder/internal/base"
 	"github.com/cherryReptile/GoSeeder/internal/seeders"
-	"runtime"
+	_ "go.uber.org/automaxprocs"
 	"sync"
 )
 
@@ -13,7 +13,6 @@ func main() {
 	app.Init()
 
 	fmt.Println("start")
-	runtime.GOMAXPROCS(4)
 
 	wg := &sync.WaitGroup{}
 	for goroutineNum := 0; goroutineNum < 80; goroutineNum++ {
